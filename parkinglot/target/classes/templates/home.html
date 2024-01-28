@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <!--Codifica in UTF-8 e visualizzazione per dispositivi mobili-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Login Page</title>
+    
+    <!--Bootstrap, jQuery-->
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!--Caricamento dinamico dell'header-->
+    <script>
+        $(document).ready(function () {
+			$(function () {
+				$("#header").load("header.html");
+			});
+		});
+    </script>
+</head>
+
+<!--Login form-->
+<body class="bg-light">
+    <!--Header dinamico-->
+    <div id="header"></div>
+    <div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Login</h3>
+                </div>
+                <div class="card-body">
+                    <!--Login form-->
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <!--Error msg dinamico-->
+                        <div id="error"></div>
+                        <!--Submit login-->
+                        <button type="submit" class="btn btn-primary">Login</button>
+                        <label>Don't have an account? </label>
+                        <!--Indirizzamento alla pagina di SignUp-->
+                        <a class="btn btn-warning" href="https://localhost:8443/signup">SignUp</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+
+    <!--Login form-->
+    <script>
+	
+        $(document).ready(function() {
+
+        //----------Se l'utente è già autenticato-----------------------------
+		if(localStorage.getItem("userId")!=null || localStorage.getItem("userId")!=undefined ){
+			 window.location.href = 'https://localhost:8443/dashboard';
+		}
+		else{
+            //--------Altrimenti, si esegue il login--------------------
+
+            //-----Submit login form-----------------
+            $('#loginForm').submit(function(e) {
+                //Previene l'invio di default del form e gestisco il login con una chiamata API
+                e.preventDefault();
+              
+                var username = $('#username').val();
+                var password = $('#password').val();
+        
+               jQuery.ajax({
+                    url: 'https://localhost:8443/api/users/login',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ email: username, password: password }),
+                    //richiesta avvenuta con successo
+                    success: function(data) {
+                        console.log(data);
+                        if(data.id){
+                            localStorage.setItem("token",data.token);
+                            localStorage.setItem("email",data.email);
+                            localStorage.setItem("userId",data.id);
+                            localStorage.setItem("name",data.name);
+                            let value = [];
+                            for (let index = 0; index < data.role.length; index++) {
+                                value.push(data.role[index].name);
+                            }
+
+                            localStorage.setItem("role",value.join());
+                            window.location.href = 'https://localhost:8443/dashboard';
+                        } else {
+                            $("#error").empty();
+                            $("#error").append("<p style='color:red'>"+data.message+"</p>");
+                        }
+                    },
+                    //richiesta fallita    
+                    error: function() {
+                        alert('Authentication failed. Please check your username and password.');
+                    }
+                });
+            });
+            }
+        });
+    </script>
+
+</body>
+
+</html>
+

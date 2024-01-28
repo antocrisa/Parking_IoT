@@ -1,0 +1,98 @@
+{
+  "groups": [
+    {
+      "name": "parkinglot.mqtt",
+      "type": "org.eclipse.paho.client.mqttv3.MqttConnectOptions",
+      "sourceType": "com.parkinglot.mqtt.MqttConfig",
+      "sourceMethod": "public org.eclipse.paho.client.mqttv3.MqttConnectOptions mqttConnectOptions() "
+    }
+  ],
+  "properties": [
+    {
+      "name": "parkinglot.mqtt.automatic-reconnect",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.clean-session",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.connection-timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.custom-web-socket-headers",
+      "type": "java.util.Properties",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.debug",
+      "type": "java.util.Properties",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.executor-service-timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.https-hostname-verification-enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.keep-alive-interval",
+      "type": "java.lang.Integer",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.max-inflight",
+      "type": "java.lang.Integer",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.max-reconnect-delay",
+      "type": "java.lang.Integer",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.mqtt-version",
+      "type": "java.lang.Integer",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.password",
+      "type": "java.lang.Character[]",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.s-s-l-hostname-verifier",
+      "type": "javax.net.ssl.HostnameVerifier",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.s-s-l-properties",
+      "type": "java.util.Properties",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.server-u-r-is",
+      "type": "java.lang.String[]",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.socket-factory",
+      "type": "javax.net.SocketFactory",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    },
+    {
+      "name": "parkinglot.mqtt.user-name",
+      "type": "java.lang.String",
+      "sourceType": "org.eclipse.paho.client.mqttv3.MqttConnectOptions"
+    }
+  ],
+  "hints": []
+}

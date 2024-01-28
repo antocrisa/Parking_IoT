@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!--Codifica in UTF-8 e visualizzazione per dispositivi mobili-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<title>SignUp</title>
+
+	<!--Bootstrap, jQuery-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+	
+	<script>
+
+		$(document).ready(function () {
+			//Caricamento dinamico dell'header	
+			$(function () {
+				$("#header").load("header.html");
+			});
+			
+			//------------------Submit SignUp-------------------
+			$('#signupClick').click(function(){
+				
+			var data = {}
+			data["name"] = $("#username").val();
+			data["email"] = $("#email").val();
+			data["password"] = $("#password").val();
+			data["role"] = ["ROLE_USER"];
+
+			//---------------ROLE_USER default (elimino la possibilità della scelta del ruolo)--------------		
+        	/*var roles = [];
+			$(':checkbox:checked').each(function(i){
+          	roles[i] = $(this).val();
+        	});
+
+			data["role"] = roles;*/
+
+			
+			var cpassword = $(".cpassword").val();
+
+			//-----------Validazione SignUp form--------------------------
+			if (data["name"] == null || data["name"] == undefined || data["name"] == "" || data["name"].trim() == "" ||
+				data["email"] == null || data["email"] == undefined || data["email"] == "" || data["email"].trim() == "" ||
+				data["password"] == null || data["password"] == undefined || data["password"] == "" || data["password"].trim() == "" ||
+				data["role"] == null || data["role"] == undefined || data["role"] == "" || data["role"].length == 0) {
+					
+				$("#error").empty();
+                $("#error").append("<p style='color:red'>Fields Cannot be blank!</p>");
+				return false;
+			} else if (cpassword !== data["password"]) {
+				$("#error").empty();
+                $("#error").append("<p style='color:red'>Password mismatch Error!</p>");
+				return false;
+			} else if (!ValidateEmail(data["email"])) {
+				$("#error").empty();
+                $("#error").append("<p style='color:red'>Email is not valid!</p>");
+				return false;
+			}
+
+			//---------------Chiamata API SignUP---------------------------------
+			$.ajax({
+				type: "post",
+				data: JSON.stringify(data),
+				url: "https://localhost:8443/api/users/signup",
+				contentType: 'application/json',
+				
+				//richiesta avvenuta con successo
+				success: function(data) {
+					if(data.id){
+					jQuery.noConflict();
+					//---------Msg dinamico di successo-------	
+					$("#successAlert").children('.modal-dialog').children('.modal-content').children('span').html("<p style='font-size:20px;color:green'>Registration success, please login</p>");
+					$("#successAlert").appendTo("body").modal('show');
+					
+						//--------Reindirizza alla pagina di Login dopo 3 secondi-----------------
+						window.setTimeout(function () {
+							window.location.href = "https://localhost:8443/home.html";
+						}, 3000);
+
+					} else {
+						jQuery.noConflict();
+						$("#error").empty();
+                		$("#error").append("<p style='color:red'>"+data.message+"</p>");
+				
+					}
+					
+				//richiesta fallita	
+				}, error: function (err) {
+					
+					//---------Msg dinamico di errore-------
+					$("#errorAlert").children('.modal-dialog').children('.modal-content').children('span').html("<p style='font-size:20px;color:red'>" + err.responseJSON.message + "</p>");
+					$("#errorAlert").appendTo("body").modal('show');
+
+				}
+			});
+			});
+
+		});
+        </script>
+
+	<script>
+
+		//---------------------Regex Email--------------------------
+		function ValidateEmail(mail) {
+			if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+				return (true)
+			}
+			return (false)
+		}
+	</script>
+</head>
+
+<body>
+	<!--Header dinamico-->
+	<div id="header"></div>
+
+    <div class="container" style="padding-bottom: 25px;">
+        <div class="row">
+            <div class="card col-md-6 mx-auto" style="margin-top: 20px; background-color: aqua;">
+                
+				<!--Error div dinamico-->
+				<div class="error" style="display:none;">
+                    <div class="alert alert-danger">Invalid credentials</div>
+                </div>
+
+                <div class="card-body">
+                    <h4 class="card-title">Register:</h4>
+                    
+                    <!-- SignUp form -->
+                    <div class="form-group">
+                        <label for="username">Name</label>
+                        <input id="username" type="text" class="form-control" required autofocus />
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" class="form-control" required autofocus />
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" class="form-control" required autofocus />
+                    </div>
+                    <div class="form-group">
+                        <label for="cpassword">Confirm Password</label>
+                        <input id="cpassword" type="password" class="form-control cpassword" required autofocus />
+                    </div>
+
+                    <!-- Role form -->
+					<!--ROLE_USER HIDE
+                    <div class="form-group">
+                        <div role="checkbox" class="group_checkbox" aria-checked="mixed" tabindex="0">
+                            Role :
+                        </div>
+
+						-----------------Nascondo la possibilità di registrarsi come ROLE_ADMIN-----------------------------
+						<input type="checkbox" id="vehicle1" name="role[]" value="ROLE_ADMIN">
+                        <label for="vehicle1"> ADMIN</label><br>
+                        
+						
+						<input type="checkbox" id="vehicle2" name="role[]" value="ROLE_USER">
+                        <label for="vehicle2"> USER</label><br>
+                    </div>-->
+
+                    <div id="error"></div>
+                    
+                    <!-- Submit SignUp -->
+                    <button type="submit" id="signupClick" class="btn btn-primary">Register</button>
+                    <span>Already have an account? </span>
+					<!--Reindirizzamento pagina di login-->
+                    <a type="submit" class="btn btn-warning" href="https://localhost:8443/home.html">LOGIN</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+	<!--SignUp Error Alert-->
+    <div class="modal" id="errorAlert" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content text-center" style="padding: 10px; background-color: bisque;">
+				<p style="font-size: 2em; color: red;">Errore</p>
+				
+				<!--Msg dinamico-->
+				<span id="errorMsg"></span><br>
+				
+				<button type="button" class="btn btn-success" data-dismiss="modal">Okay</button>
+			</div>
+		</div>
+	</div>
+	
+	<!--SignUp Success Alert-->
+    <div class="modal" id="successAlert" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content text-center" style="padding: 10px; background-color: bisque;">
+				<img src="../img/claps.png" width="100" height="100" alt=""><br>
+				
+				<!--Msg dinamico-->
+				<span id="successMsg"></span><br><br>
+				
+				<button type="button" class="btn btn-success" data-dismiss="modal">Okay</button>
+			</div>
+		</div>
+	</div>
+	
+
+
+
+</body>
+
+</html>

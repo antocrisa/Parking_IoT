@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+      <!--Bootstrap, jQuery-->
+      <link rel="stylesheet" href="css/lib/bootstrap.min.css">
+      <script src="js/lib/bootstrap.min.js"></script>
+      <script src="js/lib/jquery.min.js"></script>
+      <script src="js/lib/popper.min.js"></script>
+       
+  <script>
+    $(document).ready(function () {
+
+      //Se loggato.....
+      if (localStorage.getItem("userId") !== "" &&
+          localStorage.getItem("userId") !== null &&
+          localStorage.getItem("userId") !== undefined) {
+
+        $('#usernameValue').text(localStorage.getItem("name"));
+        $(".userName").attr("style", "display:block;");
+        $(".loginButton").attr("style", "display:none;");
+
+        //Se admin...
+        if (!localStorage.getItem("role").includes("ADMIN")) {
+          $(".isUser").attr("style", "display:block;");
+        }
+        //Se user...
+        if (localStorage.getItem("role").includes("ADMIN")) {
+          $(".isAdmin").attr("style", "display:block;");
+        }
+
+      } else {
+        $(".userName").attr("style", "display:none;");
+        $(".loginButton").attr("style", "display:block;");
+      }
+    });
+
+
+      //Se logout....
+      $("#logout").click(function () {
+        
+        //Nascondo il blocco username
+        $(".userName").attr("style", "display:none;");
+        //Rendo visibile il tasto login
+        $(".loginButton").attr("style", "display:block;");
+
+          localStorage.removeItem("userId", "");
+					localStorage.removeItem("name", "");
+					localStorage.removeItem("token", "");
+					localStorage.removeItem("email", "");
+					localStorage.removeItem("role", "");
+
+        window.location.replace("/");
+      });
+
+  </script>
+
+</head>
+
+<body>
+  <!-- Barra di navigazione -->
+  <nav class="navbar navbar-expand-lg" style="background-color: #262673; padding: 0;">
+    <!--Logo-->
+    <a class="navbar-brand" href="#" style="font-family: cursive; font-weight: 700; color: white">
+      <img src="../img/logo.png" width="50" height="50" alt="">&nbsp;ParkingAPP
+    </a>
+     
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <!-- Elemento per l'utente loggato (userName) -->
+        <li class="nav-item dropdown userName" style="display: none;">
+          <a style="color: white !important" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+            role="button">
+            <!--Span dinamico per l'username-->
+            <span id="usernameValue"></span>
+          </a>
+
+          <!-- Dropdown menu per l'utente loggato -->
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" id="logout">Logout</a>
+          </div>
+        </li>
+
+        <!-- Elemento del menu per l'utente non loggato (loginButton) -->
+        <li class="nav-item loginButton" style="display: none;">
+          <a class="btn btn-outline-success my-2 my-sm-0" href="/home.html">SIGN IN</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</body>
+
+
+
+
+</html>
